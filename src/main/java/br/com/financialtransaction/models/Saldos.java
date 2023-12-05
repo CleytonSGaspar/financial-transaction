@@ -12,4 +12,8 @@ public class Saldos {
     @Id
     private long conta;
     private double saldo;
+
+    public Saldos() {
+
+    }
 }

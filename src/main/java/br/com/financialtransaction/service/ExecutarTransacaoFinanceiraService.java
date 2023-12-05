@@ -46,8 +46,8 @@ public class ExecutarTransacaoFinanceiraService {
 
                 // Return the success message with the updated balances
                 return String.format("Transacao numero %s foi efetivada com "
-                        + "sucesso! Novos saldos: Conta Origem: %s | Conta Destino: %s", correlationId,
-                        novoSaldoOrigem, novoSaldoDestino);
+                                             + "sucesso! Novos saldos: Conta Origem: %s | Conta Destino: %s", correlationId,
+                                     novoSaldoOrigem, novoSaldoDestino);
             }
         } catch (Exception e) {
             return String.format("Transacao numero %s foi cancelada pois não foi encontrada a conta", correlationId);
@@ -80,9 +80,9 @@ public class ExecutarTransacaoFinanceiraService {
             // Add the transfer amount to the destination account's balance
             destinationAccountBalance.setSaldo(destinationAccountBalance.getConta() + amount);
 
-            System.err.printf("Transaction number %s was successfully completed! "
-                    + "New balances: Origin Account: %s | Destination Account: %s \n", correlationId,
-                    originAccountBalance.getConta(), destinationAccountBalance.getConta());
+            System.err.printf(" Transaction number %s was successfully completed! "
+                                      + "New balances: Origin Account: %s | Destination Account: %s \n", correlationId,
+                              originAccountBalance.getConta(), destinationAccountBalance.getConta());
         }
     }
 
@@ -101,7 +101,7 @@ public class ExecutarTransacaoFinanceiraService {
 
     /**
      * Updates the saldo of a given account.
-     * 
+     *
      * @param conta - The account to be updated
      * @return The updated account
      */
@@ -116,17 +116,18 @@ public class ExecutarTransacaoFinanceiraService {
      * @return The balance of the account in JSON format.
      */
     public Saldos getBalanceJson(long id) {
+        Saldos saldo = new Saldos();
         try {
             List<Saldos> list = ReaderJson.readListFrom("src/main/resources/ContaSaldo.json");
-            return list.stream()
+            saldo = list.stream()
                     .filter(saldos -> saldos.getConta() == id)
-                    .findFirst().get();
-        } catch (IOException e) {
+                    .findFirst().orElseThrow(() -> new IllegalArgumentException(
+                            String.format("Conta %s nao encontrada", id)
+                    ));
+        } catch (IllegalArgumentException | IOException e) {
             // If the JSON file is not found, print an error message.
             System.err.printf("Conta %s não encontrada", id);
         }
-        // If the balance is not found in the JSON file, retrieve it from the
-        // repository.
-        return this.repository.findById(id).get();
+        return saldo;
     }
 }
