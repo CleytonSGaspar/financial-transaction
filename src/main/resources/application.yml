@@ -1,0 +1,11 @@
+# INICIO - CORE PROPERTIES
+# https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#core-properties
+info:
+  app:
+    name: "REST API Financial Transaction"
+    description: "Aplicação em Spring Boot REST API para Realizar transações financeiras"
+    version: "1.0.1"
+spring:
+    mvc:
+      pathmatch:
+            matching-strategy: ant_path_matcher
